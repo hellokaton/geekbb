@@ -98,47 +98,6 @@ CREATE TABLE `logs` (
   KEY `idx_created` (`created`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='系统日志表';
 
-LOCK TABLES `logs` WRITE;
-/*!40000 ALTER TABLE `logs` DISABLE KEYS */;
-
-INSERT INTO `logs` (`id`, `username`, `action`, `ip`, `user_agent`, `created`)
-VALUES
-	(1,'biezhi','点赞帖子: 4mo2ikc6fxq3ov77rk','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 13:19:58'),
-	(2,'biezhi','点赞帖子: de57tdcvfew2gmpp38','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 13:20:07'),
-	(3,'biezhi','收藏帖子: de57tdcvfew2gmpp38','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 13:20:09'),
-	(4,'biezhi','点赞帖子: 0vxys3c0fdr8ovmm4d','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 13:20:19'),
-	(5,'biezhi','收藏帖子: 0vxys3c0fdr8ovmm4d','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 13:20:19'),
-	(6,'biezhi','点赞帖子: me64tocwfgo72krrgm','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 13:20:22'),
-	(7,'biezhi','点赞帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 14:26:19'),
-	(8,'biezhi','点赞帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 14:33:46'),
-	(9,'biezhi','点赞帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 14:34:19'),
-	(10,'biezhi','点赞帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 14:34:57'),
-	(11,'biezhi','取消点赞帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 14:36:22'),
-	(12,'biezhi','登录站点','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:18:56'),
-	(13,'biezhi','点赞帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:19:00'),
-	(14,'biezhi','收藏帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:19:00'),
-	(15,'biezhi','取消收藏帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:19:01'),
-	(16,'biezhi','取消点赞帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:19:01'),
-	(17,'biezhi','收藏帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:19:02'),
-	(18,'biezhi','点赞帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:19:02'),
-	(19,'biezhi','评论帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:19:32'),
-	(20,'biezhi','收藏帖子: me64tocwfgo72krrgm','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:21:38'),
-	(21,'biezhi','取消点赞帖子: me64tocwfgo72krrgm','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:21:39'),
-	(22,'biezhi','点赞帖子: me64tocwfgo72krrgm','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:21:39'),
-	(23,'biezhi','取消点赞帖子: me64tocwfgo72krrgm','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:21:39'),
-	(24,'biezhi','点赞帖子: me64tocwfgo72krrgm','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:21:40'),
-	(25,'biezhi','取消点赞帖子: me64tocwfgo72krrgm','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:22:18'),
-	(26,'biezhi','点赞帖子: me64tocwfgo72krrgm','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:22:19'),
-	(27,'biezhi','登录站点','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:32:03'),
-	(28,'biezhi','评论帖子: kr6xb7cdf3low5rr3p','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-14 21:38:15'),
-	(29,'biezhi','登录站点','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-18 22:19:57'),
-	(30,'biezhi','登录站点','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-18 22:21:54'),
-	(31,'biezhi','评论帖子: 5loni7cwf62okqyyd0','127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36','2018-04-18 22:46:39');
-
-/*!40000 ALTER TABLE `logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
 # Dump of table nodes
 # ------------------------------------------------------------
 
@@ -348,7 +307,7 @@ VALUES
 	('site.keywords','极客,开发者,程序员,编程社区,Github',1),
 	('site.subtitle','极客开发者社区',1),
 	('site.title','Geek Dev',1),
-	('site.url','https://geek-dev.club',1),
+	('site.url','http://127.0.0.1:9000',1),
 	('site.version','0.23',1);
 
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
@@ -468,7 +427,6 @@ VALUES
 
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
-
 
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
