@@ -1,0 +1,170 @@
+#include("../layout/header.html", { title: '帖子管理'})
+<div class="container nav-margin">
+    <div class="row mt-3">
+        #include("./side_left.html")
+        <div class="col-sm-10 bg-white p-4">
+            <div class="row col">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label>总帖子数：${topics.totalRows}</label>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input name="title" type="text" class="form-control" placeholder="帖子标题"
+                               value="${topic.title ?! ''}"/>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input name="username" type="text" class="form-control" placeholder="发布人"
+                               value="${topic.username ?! ''}"/>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <select class="form-control" name="topicType">
+                            <option value="">帖子类型</option>
+                            <option value="TOPIC" #if(topic.topicType==
+                            'TOPIC') selected #end>主题</option>
+                            <option value="BLOG" #if(topic.topicType==
+                            'BLOG') selected #end>博客</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2"><i class="czs-search-l"></i> 查询</button>
+                </form>
+            </div>
+            <div class="row">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">标题</th>
+                        <th scope="col">发布人</th>
+                        <th scope="col">发布时间</th>
+                        <th scope="col">评论数</th>
+                        <th scope="col">点赞数</th>
+                        <th scope="col">收藏数</th>
+                        <th scope="col">状态</th>
+                        <th scope="col">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    #for(item : topics.rows)
+                    <tr tid="${item.tid}">
+                        <td>
+                            <a target="_blank" title="${emoji(item.title)}" href="/t/${item.tid}">
+                                ${extract(emoji(item.title), 15)}
+                            </a>
+                        </td>
+                        <td>
+                            <a target="_blank" href="/u/${item.username}">
+                                ${item.username}
+                            </a>
+                        </td>
+                        <td>${datetime(item.created)}</td>
+                        <td align="center">${item.comments}</td>
+                        <td align="center">${item.loves}</td>
+                        <td align="center">${item.collects}</td>
+                        <td>
+                            #if(item.state == 1)
+                            <span class="badge badge-success">正常</span>
+                            #elseif(item.state == 2)
+                            <span class="badge badge-warning">锁定</span>
+                            #elseif(item.state == 0)
+                            <span class="badge badge-secondary">已删除</span>
+                            #end
+                        </td>
+                        <td>
+                            #if(item.state == 1)
+                            #if(GEEK_DEV_USER.role == 'MASTER')
+                            <button type="button" class="btn btn-danger btn-sm del-topic"><i class="czs-trash"></i> 删除</button>
+                            #end
+                            <button type="button" class="btn btn-dark btn-sm lock-topic"><i class="czs-lock"></i> 锁定</button>
+                            #elseif(item.state == 2)
+                            #if(GEEK_DEV_USER.role == 'MASTER')
+                            <button type="button" class="btn btn-danger btn-sm del-topic"><i class="czs-trash"></i> 删除</button>
+                            #end
+                            <button type="button" class="btn btn-warning btn-sm unlock-topic"><i class="czs-lock-l"></i> 解锁</button>
+                            #end
+                        </td>
+                    </tr>
+                    #end
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row justify-content-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        #if(topics.hasPrevPage)
+                        <li class="page-item"><a class="page-link"
+                                                 href="/admin/topics?page=${topics.prevPage}">上一页</a></li>
+                        #else
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">上一页</a>
+                        </li>
+                        #end
+
+                        #for(navPage : topics.navPageNums)
+                        <li class="page-item #if(topics.pageNum == navPage) active #end">
+                            <a class="page-link" href="/admin/topics?page=${navPage}">${navPage}</a>
+                        </li>
+                        #end
+
+                        #if(topics.hasNextPage)
+                        <li class="page-item"><a class="page-link"
+                                                 href="/admin/topics?page=${topics.nextPage}">下一页</a></li>
+                        #else
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">下一页</a>
+                        </li>
+                        #end
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+#include("../layout/footer.html")
+<script type="text/javascript">
+    $('.lock-topic').click(function () {
+        if (window.confirm('确定要锁定该帖子吗？')) {
+            var tid = $(this).parents('tr:eq(0)').attr('tid');
+            $.post('/admin/topics/lockOrDelete', {
+                tid: tid,
+                lock: true
+            }, function (result) {
+                if (result.success) {
+                    window.location.reload();
+                } else {
+                    alert(result.msg || '锁定失败');
+                }
+            });
+        }
+    });
+    $('.del-topic').click(function () {
+        if (window.confirm('确定要删除该帖子吗？')) {
+            var tid = $(this).parents('tr:eq(0)').attr('tid');
+            $.post('/admin/topics/lockOrDelete', {
+                tid: tid,
+                delete: true
+            }, function (result) {
+                if (result.success) {
+                    window.location.reload();
+                } else {
+                    alert(result.msg || '删除失败');
+                }
+            });
+        }
+    });
+    $('.unlock-topic').click(function () {
+        var tid = $(this).parents('tr:eq(0)').attr('tid');
+        $.post('/admin/topics/lockOrDelete', {
+            tid: tid,
+            unlock: true
+        }, function (result) {
+            if (result.success) {
+                window.location.reload();
+            } else {
+                alert(result.msg || '解锁失败');
+            }
+        });
+    });
+</script>
+</body>
+</html>

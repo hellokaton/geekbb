@@ -1,0 +1,105 @@
+#include("./layout/header.html", {title: profile.name})
+<style>
+    .social-info {
+        padding-right: 20px;
+        text-decoration: none;
+        color: #f44336;
+    }
+</style>
+<div class="container-fluid bg-dark" style="margin-top: 50px;">
+    <div class="row pt-5 pb-5">
+        <div class="offset-2">
+            <div class="row">
+                <img class="rounded-circle" src="${profile.avatar}" alt="" width="150" height="150" />
+            </div>
+            <div class="mt-3">
+                <h2 class="text-white">${emoji(profile.name)}</h2>
+            </div>
+        </div>
+        <div class="col-sm-6 pl-5 pt-4">
+            <div>
+                <blockquote class="text-white" style="background-color: #343a40; border:none;">
+                    <h5><i class="czs-quote-left"></i> ${emoji(profile.bio)} <i class="czs-quote-right"></i></h5>
+                </blockquote>
+            </div>
+            <div class="pt-3">
+                ${socialInfo(profile)}
+                #if(null != profile.website && profile.website != '')
+                <a title="主页" target="_blank" class="social-info" href="${profile.website}"><i class="czs-link-l"></i></a>
+                #end
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="margin-top: -30px;">
+    <div class="row">
+        <div class="col-sm-3 mb-2">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">About</h4>
+                    <div class="card-text">
+                        #if(null != profile.email && profile.email != '')
+                        <p><i class="czs-message"></i> ${profile.email}</p>
+                        #end
+                        #if(null != profile.location && profile.location != '')
+                        <p><i class="czs-location"></i> ${profile.location}</p>
+                        #end
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 mb-2">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">最近发表</h4>
+                    <div class="card-text">
+                        <ul class="list-group list-group-flush">
+                            #for(item : topics)
+                            <li class="list-group-item">
+                                <div>
+                                    ${prettyTime(item.created)} <a href="/t/${item.tid}">${item.title}</a>
+                                </div>
+                                <div>
+                                    ${item.intro}
+                                </div>
+                            </li>
+                            #end
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h4 class="card-title">最近回复</h4>
+                    <div class="card-text">
+                        <ul class="list-group list-group-flush">
+                            #for(item : comments)
+                            <li class="list-group-item">
+                                <div>
+                                    ${prettyTime(item.created)} <a href="/t/${item.tid}#comment-${item.cid}">${item.topicTitle}</a>
+                                </div>
+                                <div>
+                                    ${item.content}
+                                </div>
+                            </li>
+                            #end
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h4 class="card-title">Github 仓库</h4>
+                    <div class="card-text">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+#include("./layout/footer.html")
+</body>
+</html>

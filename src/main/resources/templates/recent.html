@@ -1,0 +1,105 @@
+#include("./layout/header.html")
+<div class="container nav-margin">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li>当前位置：</li>
+                <li class="breadcrumb-item"><a href="/">首页</a></li>
+                #if(nid != '')
+                <li class="breadcrumb-item"><a href="/recent">最新主题</a></li>
+                <li class="breadcrumb-item active" aria-current="page">${nodeTitle}</li>
+                #else
+                <li class="breadcrumb-item active" aria-current="page">最新主题</li>
+                #end
+
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        #for(item : nodes)
+        <a href="/recent?node=${item.nid}" class="mr-2">${item.title}</a>
+        #end
+    </div>
+</div>
+<div class="container bg-white">
+    <div class="row topics mt-3">
+        <ul class="list-unstyled">
+            #for(item : topics.rows)
+            <li class="media bg-white px-3 mt-3">
+                <a href="/u/${item.username}" alt="${emoji(item.user.name)}" title="${emoji(item.user.name)}">
+                    <img class="rounded-circle mr-3" data-src="holder.js/64x64" alt="64x64"
+                         style="width: 64px; height: 64px;" src="${item.user.avatar}" data-holder-rendered="true">
+                </a>
+                <div class="media-body">
+                    <a class="text-dark" href="/t/${item.tid}" title="${emoji(item.title)}" alt="${emoji(item.title)}">
+                        <h5 class="mt-0 mb-1">${emoji(item.title)}</h5>
+                    </a>
+                    <p class="text-secondary">
+                        ${item.intro}
+                    </p>
+                    <div class="topic-meta">
+                        <div class="float-left" style="width: 100px;">
+                            <a href="/recent?node=${item.nodeId}" class="badge badge-dark" alt="${item.nodeTitle}}" title="${item.nodeTitle}"># ${item.nodeTitle}</a>
+                        </div>
+                        <div class="float-left" style="width: 55px;">
+                            <a title="${item.comments} 个评论" class="pl-3 comment" href="/t/${item.tid}#comments')}">
+                                <i class="czs-talk"></i> <span>${item.comments}</span>
+                            </a>
+                        </div>
+                        <div class="float-left" style="width: 55px;">
+                            <a title="${item.loves} 个喜欢" class="pl-2 love">
+                                <i class="czs-heart"></i> <span>${item.loves}</span>
+                            </a>
+                        </div>
+                        <div class="float-left">
+                            <span class="pl-3 publish">${prettyTime(item.created)}发布</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            #end
+        </ul>
+    </div>
+    <div class="row justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                #if(topics.hasPrevPage)
+                #if(nid != '')
+                <li class="page-item"><a class="page-link" href="/recent?node=${nid}&p=${topics.prevPage}">上一页</a></li>
+                #else
+                <li class="page-item"><a class="page-link" href="/recent?p=${topics.prevPage}">上一页</a></li>
+                #end
+                #else
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">上一页</a>
+                </li>
+                #end
+
+                #for(navPage : topics.navPageNums)
+                <li class="page-item #if(topics.pageNum == navPage) active #end">
+                    #if(nid != '')
+                    <a class="page-link" href="/recent?node=${nid}&p=${navPage}">${navPage}</a>
+                    #else
+                    <a class="page-link" href="/recent?p=${navPage}">${navPage}</a>
+                    #end
+                </li>
+                #end
+
+                #if(topics.hasNextPage)
+                #if(nid != '')
+                <li class="page-item"><a class="page-link" href="/recent?node=${nid}&p=${topics.nextPage}">下一页</a></li>
+                #else
+                <li class="page-item"><a class="page-link" href="/recent?p=${topics.nextPage}">下一页</a></li>
+                #end
+                #else
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">下一页</a>
+                </li>
+                #end
+            </ul>
+        </nav>
+    </div>
+</div>
+#include("./layout/footer.html")
+</body>
+</html>

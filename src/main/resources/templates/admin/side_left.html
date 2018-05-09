@@ -1,0 +1,56 @@
+<div class="col-sm-2">
+    <div class="card bg-light mb-3">
+        <div class="card-header">
+            <h5><i class="czs-home"></i> 后台管理</h5>
+        </div>
+        <div class="card-header">
+            <h5><a target="_blank" href="/">查看前台</a></h5>
+        </div>
+        <div class="list-group side-bar">
+            <a #if(active== 'users') class="text-white" #end href="/admin/users">
+            <li class="list-group-item list-group-item-action #if(active == 'users') active #end">
+                <i class="czs-user"></i> 用户管理
+            </li>
+            #if(GEEK_DEV_USER.role == 'MASTER')
+            </a>
+            <a #if(active=='nodes') class="text-white" #end href="/admin/nodes">
+                <li class="list-group-item list-group-item-action #if(active=='nodes') active #end">
+                    <i class="czs-square-o"></i> 节点管理
+                </li>
+            </a>
+            #end
+            <a #if(active=='topics') class="text-white" #end href="/admin/topics">
+                <li class="list-group-item list-group-item-action #if(active=='topics') active #end">
+                    <i class="czs-book"></i> 帖子管理
+                </li>
+            </a>
+            #if(GEEK_DEV_USER.role == 'MASTER')
+            <a #if(active=='promotion') class="text-white" #end href="/admin/promotion">
+                <li class="list-group-item list-group-item-action #if(active=='promotion') active #end">
+                    <i class="czs-operation"></i> 推广管理
+                </li>
+            </a>
+            <a #if(active=='sys') class="text-white" #end href="/admin/sys">
+                <li class="list-group-item list-group-item-action #if(active=='sys') active #end">
+                    <i class="czs-setting"></i> 系统配置
+                </li>
+            </a>
+            <a #if(active=='iphits') class="text-white" #end href="/admin/iphits">
+                <li class="list-group-item list-group-item-action #if(active=='iphits') active #end">
+                    <i class="czs-bug"></i> IP黑名单
+                </li>
+            </a>
+            <a #if(active=='logs') class="text-white" #end href="/admin/logs">
+                <li class="list-group-item list-group-item-action #if(active=='logs') active #end">
+                    <i class="czs-bar-chart"></i> 操作日志
+                </li>
+            </a>
+            <a #if(active=='site') class="text-white" #end href="/admin/site">
+                <li class="list-group-item list-group-item-action #if(active=='site') active #end">
+                    <i class="czs-computer"></i> 站点设置
+                </li>
+            </a>
+            #end
+        </div>
+    </div>
+</div>

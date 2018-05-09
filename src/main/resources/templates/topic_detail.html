@@ -1,0 +1,151 @@
+#include("./layout/header.html", {title : topic.title})
+<link rel="stylesheet" href="/static/share/css/share.min.css"/>
+<link rel="stylesheet" href="/static/mditor/css/mditor.min.css"/>
+<div class="container bg-white topic-detail nav-margin" tid="${topic.tid}">
+    <div class="row col">
+        <h2>${emoji(topic.title)}</h2>
+    </div>
+    <div class="row col pt-2" style="height: 30px; line-height: 30px;">
+        <a href="/u/${topic.username}">
+            <img class="rounded-circle" src="${topic.user.avatar}" width="30" height="30"
+                 alt="${emoji(topic.user.name)}" alt="${emoji(topic.user.name)}">
+        </a>
+        <a href="/u/${topic.username}" class="ml-2">
+            ${topic.username}
+        </a>
+        ${socialInfo(topic.user)}
+    </div>
+    <div class="row col pt-5 topic-content">
+        ${topic.content}
+    </div>
+    <div class="row col mt-3" style="color: #82848a;">
+        <span class="ml-3"><i class="czs-comment"></i> <span>${topic.comments}</span></span>
+        <span class="ml-3"><i class="czs-heart"></i> <span class="loves">${topic.loves}</span></span>
+        <span class="ml-3"><i class="czs-bookmark"></i> <span class="collects">${topic.collects}</span></span>
+    </div>
+    <div class="row d-flex justify-content-center bd-highlight mb-2">
+        <div class="p-2 bd-highlight">
+            #if(topic.isLove)
+            <button class="btn btn-sm topic-love" style="background-color: #f0f0f0;"><i class="czs-thumbs-up"></i> 点赞
+            </button>
+            #else
+            <button class="btn btn-sm topic-love" style="background-color: #f0f0f0;"><i class="czs-thumbs-up-l"></i> 点赞
+            </button>
+            #end
+        </div>
+        <div class="p-2 bd-highlight">
+            #if(topic.isCollect)
+            <button class="btn btn-sm topic-collect" style="background-color: #f0f0f0;"><i class="czs-bookmark"></i>
+                收藏
+            </button>
+            #else
+            <button class="btn btn-sm topic-collect" style="background-color: #f0f0f0;"><i class="czs-bookmark-l"></i>
+                收藏
+            </button>
+            #end
+        </div>
+        <div class="p-2 bd-highlight">
+            <button class="btn btn-sm social-share-btn" style="background-color: #f0f0f0;"><i class="czs-share"></i> 分享
+            </button>
+        </div>
+    </div>
+    <div class="row col justify-content-center social-share" style="display: none;">
+    </div>
+
+    #if(null != GEEK_DEV_USER)
+    <div class="row mt-2">
+        <form id="comment-form" class="col" role="form">
+            <input type="hidden" value="${topic.tid}" id="tid">
+            <input type="hidden" value="${topic.username}" id="owner">
+            <textarea id="content" class="form-control" rows="3" placeholder="发表评论"></textarea>
+            <div class="row mt-2 col">
+                <button type="button" class="btn btn-primary" id="reply-topic">回复</button>
+            </div>
+        </form>
+    </div>
+    #else
+    <div class="row justify-content-center mt-2" style="margin: 0 auto;">
+        <div class="alert alert-primary" role="alert">
+            使用 Github <a class="alert-link" href="/auth/signin?redirect=${currentUrl()}">登录</a> 即可发表评论。
+        </div>
+    </div>
+    #end
+</div>
+
+<div class="container topic-detail bg-white mt-2" style="max-width: 960px; padding: 0;">
+    <div class="card-body pb-0" style="padding-left: 50px;">
+        <h5 class="card-title">评论列表</h5>
+    </div>
+    <div id="comments" class="row mb-2 comments">
+        #if(null == topic.commentList || topic.commentList.size() == 0)
+        <div class="row" style="margin: 0 auto;">
+            <div class="alert alert-warning" role="alert">
+                这篇帖子还没有评论！
+            </div>
+        </div>
+        #end
+
+        #for(item : topic.commentList)
+        <div id="comment-${item.cid}" class="media col-12 mb-2 pb-2" style="box-shadow: none; border-top: 1px solid #e2e2e2; padding-left: 50px;">
+            <a href="/u/${item.author}">
+                <img class="align-self-start rounded-circle mr-3" style="width: 64px; height: 64px;"
+                     src="${item.user.avatar}" data-holder-rendered="true">
+            </a>
+            <div class="media-body" style="max-width: 720px;">
+                <div class="mt-0">
+                    <div class="float-left" style="width: 90px;">
+                        <a href="/u/${item.author}">
+                            ${emoji(item.user.username)}
+                        </a>
+                    </div>
+                    <div class="float-left" style="width: 120px;">
+                        <a href="#comment-${item.cid}" title="${datetime(item.created)}">
+                            <abbr class="pl-3 timeago" style="font-size: .9rem; color: #808080;">${prettyTime(item.created)}回复</abbr>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+                <div class="mt-2">
+                    ${item.content}
+                </div>
+            </div>
+        </div>
+        <hr>
+        #end
+    </div>
+</div>
+
+<script src="/static/share/js/social-share.min.js"></script>
+<script src="/static/mditor/js/mditor.min.js"></script>
+#if(useCdn)
+<script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+#else
+<script src="/static/cdn/highlight.min.js"></script>
+#end
+<style>
+    .mditor {
+        border: 1px solid #eaebef;
+    }
+    .mditor .head{
+        background:none;
+    }
+    .mditor .backdrop, .mditor .textarea, .mditor .viewer{
+        font-size: 14px;
+    }
+    .mditor .body {
+        box-shadow: none;
+    }
+    .topic-detail > .topic-content > h1, h2, h3, h4, h5 {
+        padding-bottom: 10px;
+    }
+    .textarea{
+        -webkit-font-smoothing: none;
+    }
+</style>
+#include("./layout/footer.html")
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+</body>
+</html>

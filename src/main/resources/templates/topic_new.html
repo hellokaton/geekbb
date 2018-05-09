@@ -1,0 +1,80 @@
+#include("./layout/header.html", {title: "创建新主题"})
+<link rel="stylesheet" href="/static/mditor/css/mditor.min.css"/>
+#if(useCdn)
+<link href="//cdn.bootcss.com/select2/4.0.5/css/select2.min.css" rel="stylesheet">
+#else
+<link href="/static/cdn/select2.min.css" rel="stylesheet">
+#end
+<div class="container nav-margin bg-white topic-new">
+    <div class="row col">
+        <div class="col-12">
+            <h2>发布新主题</h2>
+        </div>
+        <div class="col-12">
+            <form role="form">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">主题类型</label>
+                    <div class="col-sm-10" style="margin-left: -50px; margin-top: 5px;">
+                        <input type="hidden" id="topicType" value="TOPIC"/>
+                        <button id="topicType1" type="button" class="btn btn-sm badge badge-dark" onclick="switchTopicType('TOPIC')">帖子</button>
+                        <button id="topicType2" type="button" class="btn btn-sm badge badge-light" onclick="switchTopicType('BLOG')">博客</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input id="title" type="text" class="form-control" placeholder="请输入标题">
+                </div>
+                <div class="form-group">
+                    <select id="nid" class="form-control">
+                        <option value="" selected>请选择节点</option>
+                        #for(item : nodes)
+                        <option value="${item.nid}" title="${item.description}">${item.title}</option>
+                        #end
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <textarea id="content" class="form-control" rows="3" placeholder="请输入主题内容"></textarea>
+                </div>
+                <button id="publish-btn" type="button" class="btn btn-primary">发布主题</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="/static/mditor/js/mditor.min.js"></script>
+#if(useCdn)
+<script src="//cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>
+<script src="//cdn.bootcss.com/select2/4.0.5/js/i18n/zh-CN.js"></script>
+#else
+<script src="/static/cdn/select2.min.js"></script>
+<script src="/static/cdn/zh-CN.js"></script>
+#end
+#include("./layout/footer.html")
+<style>
+    .mditor {
+        border: 1px solid #eaebef;
+    }
+    .mditor .head{
+        background:none;
+    }
+    .mditor .backdrop, .mditor .textarea, .mditor .viewer{
+        font-size: 14px;
+    }
+    .mditor .body {
+        box-shadow: none;
+    }
+    .topic-detail > .topic-content > h1, h2, h3, h4, h5 {
+        padding-bottom: 10px;
+    }
+    .textarea{
+        -webkit-font-smoothing: none;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#nid').select2({
+            theme: "classic"
+        });
+    });
+</script>
+</body>
+</html>

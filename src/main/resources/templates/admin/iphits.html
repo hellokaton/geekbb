@@ -1,0 +1,86 @@
+#include("../layout/header.html", { title: 'IP黑名单'})
+<div class="container nav-margin">
+    <div class="row mt-3">
+        #include("./side_left.html")
+        <div class="col-sm-10 bg-white p-4">
+            <div class="row">
+                <div class="form-group">
+                    <label>总记录数：${iphits.size()}</label>
+                    <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#ipHitModal">添加黑名单</button>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">IP地址</th>
+                        <th scope="col">创建时间</th>
+                        <th scope="col">过期时间</th>
+                        <th scope="col">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    #for(item : iphits)
+                    <tr>
+                        <th>${item.id}</th>
+                        <td>${item.ip}</td>
+                        <td>${datetime(item.created)}</td>
+                        <td>${datetime(item.expired)}</td>
+                        <td>
+                            <button type="button" class="btn btn-success btn-sm">解封</button>
+                        </td>
+                    </tr>
+                    #end
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade ipHitModal" id="ipHitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">添加IP黑名单</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="输入IP地址" id="ip"/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="saveIpHit()">确定添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+#include("../layout/footer.html")
+<script type="text/javascript">
+    function saveIpHit() {
+        var ip = $('.ipHitModal #ip').val();
+        var params = {
+            ip: ip
+        };
+        if(ip === ''){
+            alert('IP地址不能为空');
+            return
+        }
+        $.post('/admin/iphits/save', params, function (result) {
+            if(result.success){
+                alert('保存成功');
+                window.location.reload();
+            } else {
+                alert(result.msg || '保存失败');
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+#include("../layout/header.html", { title: '用户管理'})
+<div class="container nav-margin">
+    <div class="row mt-3">
+        #include("./side_left.html")
+        <div class="col-sm-10 bg-white p-4">
+            <div class="row col">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label>总用户数：${users.totalRows}</label>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input name="q" type="text" class="form-control" placeholder="用户名" value="${q ?! ''}"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2"><i class="czs-search-l"></i> 查询</button>
+                </form>
+            </div>
+            <div class="row">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">UID</th>
+                        <th scope="col">用户名</th>
+                        <th scope="col">昵称</th>
+                        <th scope="col">注册时间</th>
+                        <th scope="col">最后登录</th>
+                        <th scope="col">状态</th>
+                        <th scope="col">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    #for(item : users.rows)
+                    <tr username="${item.username}">
+                        <th scope="row">${item.uid}</th>
+                        <td>
+                            <a target="_blank" href="/u/${item.username}">
+                                ${item.username}
+                            </a>
+                        </td>
+                        <td>${item.name}</td>
+                        <td>${datetime(item.created)}</td>
+                        <td>${datetime(item.logined)}</td>
+                        <td>
+                            #if(item.state == 1)
+                            <span class="badge badge-success">正常</span>
+                            #elseif(item.state == 2)
+                            <span class="badge badge-danger">停用</span>
+                            #elseif(item.state == 3)
+                            <span class="badge badge-danger">已注销</span>
+                            #end
+                        </td>
+                        <td>
+                            #if(item.role == 'MEMBER')
+                            #if(item.state == 1)
+                            <button type="button" class="btn btn-warning btn-sm disable-user">停用</button>
+                            #end
+                            #if(item.state == 2)
+                            <button type="button" class="btn btn-success btn-sm enable-user">启用</button>
+                            #end
+                            #end
+
+                            #if(GEEK_DEV_USER.role == 'MASTER' && item.role != 'MASTER')
+                            #if(item.role == 'MEMBER')
+                            <button type="button" class="btn btn-success btn-sm set-admin">设为管理</button>
+                            #else
+                            <button type="button" class="btn btn-danger btn-sm remove-admin">取消管理</button>
+                            #end
+                            #end
+                        </td>
+                    </tr>
+                    #end
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row justify-content-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        #if(users.hasPrevPage)
+                        <li class="page-item"><a class="page-link"
+                                                 href="/admin/users?page=${users.prevPage}">上一页</a></li>
+                        #else
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">上一页</a>
+                        </li>
+                        #end
+
+                        #for(navPage : users.navPageNums)
+                        <li class="page-item #if(users.pageNum == navPage) active #end">
+                            <a class="page-link" href="/admin/users?page=${navPage}">${navPage}</a>
+                        </li>
+                        #end
+
+                        #if(users.hasNextPage)
+                        <li class="page-item"><a class="page-link"
+                                                 href="/admin/users?page=${users.nextPage}">下一页</a></li>
+                        #else
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">下一页</a>
+                        </li>
+                        #end
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+#include("../layout/footer.html")
+<script type="text/javascript">
+    $('.disable-user').click(function () {
+        if(window.confirm('确定要停用该用户吗?')){
+            var username = $(this).parents('tr:eq(0)').attr('username');
+            setState(username, 2);
+        }
+    });
+
+    $('.enable-user').click(function () {
+        var username = $(this).parents('tr:eq(0)').attr('username');
+        setState(username, 1);
+    });
+
+    $('.set-admin').click(function () {
+        if(window.confirm('确定要设置该用户为管理员吗?')){
+            var username = $(this).parents('tr:eq(0)').attr('username');
+            setRole(username, 'ADMIN');
+        }
+    });
+
+    $('.remove-admin').click(function () {
+        var username = $(this).parents('tr:eq(0)').attr('username');
+        setRole(username, 'MEMBER');
+    });
+
+    function setState(username, state) {
+        var params = {
+            username: username,
+            state: state
+        };
+        $.post('/admin/users/state', params, function (result) {
+            if (result.success) {
+                window.location.reload();
+            } else {
+                alert(result.msg || '操作失败');
+            }
+        });
+    }
+
+    function setRole(username, role) {
+        var params = {
+            username: username,
+            role: role
+        };
+        $.post('/admin/users/role', params, function (result) {
+            if (result.success) {
+                window.location.reload();
+            } else {
+                alert(result.msg || '操作失败');
+            }
+        });
+    }
+</script>
+</body>
+</html>

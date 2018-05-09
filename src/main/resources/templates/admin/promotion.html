@@ -1,0 +1,190 @@
+#include("../layout/header.html", { title: '推广管理'})
+<div class="container nav-margin">
+    <div class="row mt-3">
+        #include("./side_left.html")
+        <div class="col-sm-10 bg-white p-4">
+            <div class="row col">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label>总推广数：${promotions.size()}</label>
+                    </div>
+                    <button type="button" class="btn btn-primary mb-2 ml-2 add-promotion" data-toggle="modal" data-target="#promotionModal">
+                        <i class="czs-add"></i> 新增推广
+                    </button>
+                </form>
+            </div>
+            <div class="row">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">排序</th>
+                        <th scope="col">ICON</th>
+                        <th scope="col">标题</th>
+                        <th scope="col">位置</th>
+                        <th scope="col">创建时间</th>
+                        <th scope="col">过期时间</th>
+                        <th scope="col">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="promotions">
+                    #for(item : promotions)
+                    <tr id="${item.id}">
+                        <th scope="row">${item.sort}</th>
+                        <td>
+                            #if(null != item.icon && item.icon != '')
+                            <i class="${item.icon}"></i>
+                            #else
+                            无ICON
+                            #end
+                        </td>
+                        <td>${emoji(item.title)}</td>
+                        <td>${item.position}</td>
+                        <td>${datetime(item.created)}</td>
+                        <td>${datetime(item.expired)}</td>
+                        <td>
+                            #if(ltNow(item.expired))
+                            <button type="button" class="btn btn-warning btn-sm disable-user">显示</button>
+                            #else
+                            <button type="button" class="btn btn-danger btn-sm disable-user">隐藏</button>
+                            #end
+                            <button type="button" class="btn btn-warning btn-sm edit-promotion">编辑</button>
+                        </td>
+                    </tr>
+                    #end
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade promotionModal" id="promotionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">保存推广</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input id="id" type="hidden"/>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="输入推广的标题" id="title"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="输入推广的icon" id="icon"/>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="position">
+                            <option value="RIGHT_BOTTOM" selected>右下角</option>
+                            <option value="LEFT_BOTTOM">左下角</option>
+                            <option value="RIGHT_TOP">右上角</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="推广 HTML 内容" rows="5" id="content"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="Footer HTML 内容" id="footer"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="savePromotion()">保存推广</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+#include("../layout/footer.html")
+<script type="text/javascript" src="/static/js/Sortable.js"></script>
+<script type="text/javascript">
+
+    var el = document.getElementById('promotions');
+    Sortable.create(el, {
+        onEnd: function (evt) {
+            var ids = [];
+            var sort = [];
+            $('#promotions tr').each(function (i, element) {
+                sort.push(i);
+                ids.push(element.getAttribute('id'));
+            });
+
+            $.ajax({
+                method: 'POST',
+                url: '/admin/promotion/sort',
+                data: {
+                    "ids": ids.join(","),
+                    "sort": sort.join(",")
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data && data.success) {
+                    } else {
+                        alert(data.msg || '更新失败');
+                    }
+                }
+            });
+        }
+    });
+
+    function savePromotion() {
+        var id = $('.promotionModal #id').val();
+        var title = $('.promotionModal #title').val();
+        var icon = $('.promotionModal #icon').val();
+        var position = $('.promotionModal #position').val();
+        var content = $('.promotionModal #content').val();
+        var footer = $('.promotionModal #footer').val();
+
+        var params = {
+            id: id,
+            title: title,
+            icon: icon,
+            position: position,
+            content: content,
+            footer: footer
+        };
+        if(title === ''){
+            alert('标题不能为空');
+            return
+        }
+        if(position === ''){
+            alert('请选择位置');
+            return
+        }
+        if(content === ''){
+            alert('内容不能为空');
+            return
+        }
+        $.post('/admin/promotion/save', params, function (result) {
+            if(result.success){
+                alert('保存成功');
+                window.location.reload();
+            } else {
+                alert(result.msg || '保存失败');
+            }
+        });
+    }
+    
+    $('.edit-promotion').click(function () {
+        var id = $(this).parents('tr:eq(0)').attr('id');
+        $.getJSON('/admin/promotion/' + id, function (result) {
+            $('#promotionModal').modal({
+                keyboard: true
+            });
+            var data = result.payload;
+            $('.promotionModal #id').val(data.id);
+            $('.promotionModal #title').val(data.title);
+            $('.promotionModal #icon').val(data.icon);
+            $('.promotionModal #content').val(data.content);
+            $('.promotionModal #footer').val(data.footer);
+            $('.promotionModal #position').val(data.position);
+            // $(".selector").find("option[text='pxx']").attr("selected",true);
+        });
+    });
+</script>
+</body>
+</html>

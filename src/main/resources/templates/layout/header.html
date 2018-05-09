@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="${siteKeywords(keywords ?! '')}"/>
+    <meta name="description" content="${siteDescription(description ?! '')}"/>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"  name="viewport" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    #if(useCdn)
+    <link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" />
+    <link rel="stylesheet" href="//cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css"/>
+    <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.12.0/styles/androidstudio.min.css">
+    <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    #else
+    <link rel="stylesheet" href="/static/cdn/nprogress.min.css" />
+    <link rel="stylesheet" href="/static/cdn/sweetalert.min.css"/>
+    <link rel="stylesheet" href="/static/cdn/androidstudio.min.css">
+    <script src="/static/cdn/jquery.min.js"></script>
+    #end
+    <link rel="stylesheet" href="/static/css/main.css?v=${version()}" />
+    <title>${siteTitle(title ?! '')}</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg fixed-top box-shadow">
+    <div class="container">
+        <a class="navbar-brand" href="/" title="${siteConfig('site.title')}" alt="Geek Dev"></a>
+        <button class="navbar-toggler text-dark" data-toggle="collapse" data-target="#navbar-content">
+            <i class="czs-menu-l"></i>
+        </button>
+
+        <div class="col-4">
+            <div class="search-from">
+                <form class="form-inline" method="get" action="/search">
+                    <input name="q" class="form-control mr-sm-2" type="text" placeholder="搜索..." style="border: none; border-radius: 0;"/>
+                </form>
+            </div>
+        </div>
+
+        <div id="navbar-content" class="collapse navbar-collapse">
+            <div class="ml-auto">
+                #if(null == GEEK_DEV_USER)
+                <button class="btn btn-primary" data-toggle="modal" data-target="#signinModalPopovers"><i class="czs-github-logo"></i> 登录</button>
+                #else
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-secondary" href="#" id="navbarDropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="czs-user-l"></i> ${emoji(GEEK_DEV_USER.name)}
+                    </a>
+                    <div class="dropdown-menu"
+                         style="min-width: auto; position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;"
+                         aria-labelledby="navbarDropdownMenuLink" x-placement="bottom-start">
+
+                        #if(GEEK_DEV_USER.role != 'MEMBER')
+                        <a class="dropdown-item" href="/admin/index"><i class="czs-setting-l"></i> 管理</a>
+                        #end
+                        <a class="dropdown-item" href="/u/${GEEK_DEV_USER.username}"><i class="czs-home"></i> 主页</a>
+                        <a class="dropdown-item" href="/settings"><i class="czs-setting"></i> 设置</a>
+                        <a class="dropdown-item" href="/logout"><i class="czs-out-l"></i> 注销</a>
+                    </div>
+                </div>
+                #end
+            </div>
+        </div>
+    </div>
+</nav>

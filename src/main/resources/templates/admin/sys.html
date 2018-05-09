@@ -1,0 +1,46 @@
+#include("../layout/header.html", { title: '系统配置'})
+<div class="container nav-margin">
+    <div class="row mt-3">
+        #include("./side_left.html")
+        <div class="col-sm-10 bg-white p-4">
+            <div class="row">
+                <button class="btn btn-primary reset-count">重新计算统计数</button>
+            </div>
+            <div class="row mt-3">
+                <button to="local" class="btn btn-danger relate-sync">关系同步 DB->LOCAL</button>
+                <button to="db" class="btn btn-danger ml-3 relate-sync">关系同步 LOCAL->DB</button>
+            </div>
+        </div>
+    </div>
+</div>
+#include("../layout/footer.html")
+<script>
+    $('.reset-count').click(function () {
+        if(window.confirm('确定重新计算统计数吗？')){
+            $.post('/admin/sys/reset', function (result) {
+                if(result.success){
+                    alert('重新计算成功');
+                    window.location.reload();
+                } else {
+                    alert(result.msg || '操作失败');
+                }
+            });
+        }
+    });
+    $('.relate-sync').click(function () {
+        if(window.confirm('确定同步吗？')){
+            var to = $(this).attr('to');
+            $.post('/admin/sys/relateSync?to=' + to, function (result) {
+                if(result.success){
+                    alert('同步成功');
+                    window.location.reload();
+                } else {
+                    alert(result.msg || '操作失败');
+                }
+            });
+        }
+    });
+
+</script>
+</body>
+</html>

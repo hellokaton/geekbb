@@ -1,0 +1,34 @@
+<div id="signinModalPopovers" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalPopoversLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content" style="margin: 20% auto 0;height: 450px; max-width: 350px;  background: url('/static/img/logbg.jpg') no-repeat; border-radius: .25em .25em .4em .4em;  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); -webkit-transform: translateY(-40px);
+    ">
+            <div class="modal-body text-center">
+                <h5>登录到 Geek Dev</h5>
+                <p style="padding-top: 100px;">
+                    <a href="/auth/signin" class="btn btn-dark"><i class="czs-github-logo"></i> 使用 Github 账号登录</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center m-3 p-3">
+    Powered by <a class="ml-1 mr-1" href="/">${siteConfig("site.title")}</a> - ${siteConfig("site.subtitle")} &copy; 2018 | <a id="jsl_speed_stat1" href="http://www.yunaq.com/#zid=5ad949a445475e11bd53ec7a" target="_blank">知道创宇云安全</a> <script src="//static.yunaq.com/static/js/stat/picture1_stat.js" charset="utf-8" type="text/javascript"></script>
+</div>
+#if(useCdn)
+<script src="//cdn.bootcss.com/popper.js/1.14.2/umd/popper.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+<script src="//cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
+#else
+<script src="/static/cdn/popper.min.js"></script>
+<script src="/static/cdn/bootstrap.min.js"></script>
+<script src="/static/cdn/nprogress.min.js"></script>
+<script src="/static/cdn/sweetalert.min.js"></script>
+#end
+<script>
+    var LOGIN_USER = "${GEEK_DEV_USER.username ?! ''}";
+</script>
+<script type="text/javascript" src="/static/js/main.js?v=${version()}"></script>

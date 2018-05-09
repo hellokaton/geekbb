@@ -1,0 +1,54 @@
+<div class="col-sm-3">
+    <div class="row" style="padding: 0 15px 15px;">
+        <button class="btn btn-dark btn-block text-white new-topic"><i class="czs-write-l"></i> 发布主题</button>
+    </div>
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5><i class="${affiche().icon}"></i> ${emoji(affiche().title)}</h5>
+        </div>
+        <div class="card-body">
+            <div class="card-text">
+                ${emoji(affiche().content)}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title"><i class="czs-quote-left"></i> 小贴士</h5>
+            <p class="card-text">
+                阅读别人的文档、技术文章和代码常常让人抓狂。为了不气得抓耳挠腮、捶胸顿足，不妨先阅读前文，以期更多的细节内容。
+                <br>
+                程序中的概念很难用线性方式表达出来。阅读前文能让我们更清楚文章内容和代码在说什么。
+            </p>
+        </div>
+    </div>
+
+    #for(item : promotions())
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">
+                #if(item.icon != '') <i class="${item.icon}"></i> #end ${emoji(item.title)}</h5>
+            <div class="card-text">${mdToHtml(item.content)}</div>
+            #if(null != item.footer && item.footer != '')
+            <div>${item.footer}</div>
+            #end
+        </div>
+    </div>
+    #end
+
+    <div class="card mb-3">
+        <div class="card-body pb-0">
+            <h5 class="card-title">站点信息</h5>
+            <p class="card-text">
+            <ul class="list-unstyled">
+                <li class="">会员数：${siteConfig('count.users', '0')}</li>
+                <li class="">主题数：${siteConfig('count.topics', '0')}</li>
+                <li class="">回复数：${siteConfig('count.comments', '0')}</li>
+                <li class="">博客数：${siteConfig('count.blogs', '0')}</li>
+            </ul>
+            </p>
+        </div>
+    </div>
+
+</div>

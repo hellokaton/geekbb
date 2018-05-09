@@ -1,0 +1,55 @@
+<div class="col-sm-3">
+    <div class="card mb-3">
+        <div class="card-header no-bb">
+            <h5><i class="czs-server-l"></i> 热门节点</h5>
+        </div>
+        <div id="node-content" class="">
+            <div class="list-group side-bar">
+                <a title="全部" alt="全部" href="/">
+                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center #if(nid == '') active #end">
+                        # 全部
+                    </li>
+                </a>
+                #for(item : nodes)
+                <a alt="${item.title}" title="${item.title}" href="/?node=${item.nid}">
+                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center #if(nid == item.nid) active #end">
+                        # ${item.title}
+                        <span class="badge badge-pill" style="background-color: #343a40; color: #fff;">${item.topics}</span>
+                    </li>
+                </a>
+                #end
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header no-bb">
+            <h5><i class="czs-firewall-l"></i> 热门主题</h5>
+        </div>
+        <div class="list-group side-bar">
+            #for(item : hotTopics)
+            <a title="${item.title}" href="/t/${item.tid}">
+                <li class="list-group-item list-group-item-action">
+                    ${item.title}
+                </li>
+            </a>
+            #end
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header no-bb">
+            <h5><i class="czs-read-l"></i> 精品博文</h5>
+        </div>
+        <div class="list-group side-bar">
+            #for(item : hotBlogs)
+            <a title="${item.title}" href="/t/${item.tid}">
+                <li title="${item.title}" class="list-group-item list-group-item-action">
+                    ${item.title}
+                </li>
+            </a>
+            #end
+        </div>
+    </div>
+
+</div>

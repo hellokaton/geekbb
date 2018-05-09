@@ -1,0 +1,146 @@
+#include("../layout/header.html", { title: '节点管理', active: "nodes"})
+<div class="container nav-margin">
+    <div class="row mt-3">
+        #include("./side_left.html")
+        <div class="col-sm-10 bg-white p-4">
+            <div class="row">
+                <div class="form-group">
+                    <label>总节点数：${nodes.size()}</label>
+                    <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#nodeModal">
+                        添加新节点
+                    </button>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">节点id</th>
+                        <th scope="col">节点名称</th>
+                        <th scope="col">父节点</th>
+                        <th scope="col">创建时间</th>
+                        <th scope="col">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    #for(item : nodes)
+                    <tr nid="${item.nid}" pid="${item.pid}" title="${item.title}" description="${item.description}">
+                        <td>${item.nid}</td>
+                        <td>${item.title}</td>
+                        <td>${item.pid}</td>
+                        <td>${datetime(item.created)}</td>
+                        <td>
+                            <button type="button" class="btn btn-success btn-sm edit-node">编辑</button>
+                            #if(GEEK_DEV_USER.role == 'MASTER')
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteNode('${item.nid}')">删除
+                            </button>
+                            #end
+                        </td>
+                    </tr>
+                    #end
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade nodeModal" id="nodeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">保存节点</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input id="id" type="hidden"/>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="输入节点唯一标识, 不可重复" id="nid"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="输入节点名称" id="title"/>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="pid">
+                            <option value="" selected>选择父节点</option>
+                            #for(item : pnodes)
+                            <option value="${item.nid}" selected>${item.title}</option>
+                            #end
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="输入节点描述" rows="5" id="description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="saveNode()">保存节点</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+#include("../layout/footer.html")
+
+<script type="text/javascript">
+    function saveNode() {
+        var nid = $('.nodeModal #nid').val();
+        var title = $('.nodeModal #title').val();
+        var pid = $('.nodeModal #pid').val();
+        var description = $('.nodeModal #description').val();
+
+        var params = {
+            nid: nid,
+            title: title,
+            pid: pid,
+            description: description
+        };
+        if (nid === '') {
+            alert('节点标识不能为空');
+            $('.nodeModal #nid').focus();
+            return
+        }
+        if (title === '') {
+            alert('节点名称不能为空');
+            $('.nodeModal #title').focus();
+            return
+        }
+        $.post('/admin/nodes/save', params, function (result) {
+            if (result.success) {
+                alert('保存成功');
+                window.location.reload();
+            } else {
+                alert(result.msg || '保存失败');
+            }
+        });
+    }
+
+    function deleteNode(nid) {
+        if(window.confirm('确定要删除该节点吗?')){
+            $.post('/admin/nodes/delete/' + nid, function (result) {
+                if (result.success) {
+                    alert('删除成功');
+                    window.location.reload();
+                } else {
+                    alert(result.msg || '删除失败');
+                }
+            });
+        }
+    }
+
+    $('.edit-node').click(function () {
+        var tr = $(this).parents('tr:eq(0)');
+        $('#nodeModal').modal({
+            keyboard: true
+        });
+        $('.nodeModal #nid').val(tr.attr('nid'));
+        $('.nodeModal #title').val(tr.attr('title'));
+        $('.nodeModal #pid').val(tr.attr('pid'));
+        $('.nodeModal #description').val(tr.attr('description'));
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+#include("../layout/header.html", { title: '站点设置'})
+<div class="container nav-margin">
+    <div class="row mt-3">
+        #include("./side_left.html")
+        <div class="col-sm-10 bg-white p-4">
+            #if(null != infoMsg)
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${infoMsg}
+                <button class="close" data-dismiss="alert">&times;</button>
+            </div>
+            #end
+            <form role="form" method="post">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">网站地址</label>
+                    <div class="col-sm-10">
+                        <input name="url" type="text" class="form-control" placeholder="请输入网站地址，如 http://www.baidu.com" value="${site.url ?! ''}"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">网站标题</label>
+                    <div class="col-sm-10">
+                        <input name="title" type="text" class="form-control" placeholder="请输入网站标题，如 Roo 极客社区" value="${site.title}"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">网站副标题</label>
+                    <div class="col-sm-10">
+                        <input name="subtitle" type="text" class="form-control" placeholder="请输入网站副标题，没有可不输" value="${site.subtitle}"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">站点关键词</label>
+                    <div class="col-sm-10">
+                        <input name="keywords" type="text" class="form-control" placeholder="请输入网站关键词，如 编程,Java8,程序员,极客" value="${site.keywords}"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">站点描述</label>
+                    <div class="col-sm-10">
+                        <textarea name="description" class="form-control" rows="3" placeholder="请输入网站描述信息">${site.description}</textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">站点版本号</label>
+                    <div class="col-sm-10">
+                        <input name="version" type="text" class="form-control" placeholder="请输入网站版本号" value="${site.version}"/>
+                    </div>
+                </div>
+                <input type="hidden" name="allowRegister" id="allowRegister" value="${site.allowRegister}"/>
+                <input type="hidden" name="allowTopic" id="allowTopic" value="${site.allowTopic}"/>
+                <input type="hidden" name="allowComment" id="allowComment" value="${site.allowComment}"/>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">开放设置</label>
+                    <div class="col-sm-10">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input allowRegister" type="checkbox" #if(site.allowRegister == '1') checked #end />
+                            <label class="form-check-label">允许注册</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input allowTopic" type="checkbox" #if(site.allowTopic == '1') checked #end />
+                            <label class="form-check-label" >允许发帖</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input allowComment" type="checkbox" #if(site.allowComment == '1') checked #end />
+                            <label class="form-check-label">允许回复</label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">保存站点信息</button>
+            </form>
+        </div>
+    </div>
+</div>
+#include("../layout/footer.html")
+<script type="text/javascript">
+    $('.allowRegister').change(function () {
+        $('#allowRegister').val($(this).is(':checked') ? '1' : '0');
+    });
+    $('.allowTopic').change(function () {
+        $('#allowTopic').val($(this).is(':checked') ? '1' : '0');
+    });
+    $('.allowComment').change(function () {
+        $('#allowComment').val($(this).is(':checked') ? '1' : '0');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+#include("../layout/header.html", { title: '操作日志'})
+<div class="container nav-margin">
+    <div class="row mt-3">
+        #include("./side_left.html")
+        <div class="col-sm-10 bg-white p-4">
+            <div class="row col">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label>总日志数：${logs.totalRows}</label>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input name="username" type="text" class="form-control" placeholder="用户名" value="${log.username ?! ''}"/>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input name="ip" type="text" class="form-control" placeholder="IP地址" value="${log.ip ?! ''}"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2"><i class="czs-search-l"></i> 查询</button>
+                </form>
+            </div>
+            <div class="row">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">用户名</th>
+                            <th scope="col">IP地址</th>
+                            <th scope="col">UserAgent</th>
+                            <th scope="col">操作</th>
+                            <th scope="col">操作时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        #for(item : logs.rows)
+                        <tr>
+                            <td>
+                                <a target="_blank" href="/u/${item.username}">
+                                    ${item.username}
+                                </a>
+                            </td>
+                            <td>${item.ip}</td>
+                            <td title="${item.userAgent}">${extract(item.userAgent, 20)}</td>
+                            <td>${item.action}</td>
+                            <td>${datetime(item.created)}</td>
+                        </tr>
+                        #end
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row justify-content-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        #if(logs.hasPrevPage)
+                        <li class="page-item"><a class="page-link" href="/admin/logs?page=${logs.prevPage}">上一页</a></li>
+                        #else
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">上一页</a>
+                        </li>
+                        #end
+
+                        #for(navPage : logs.navPageNums)
+                        <li class="page-item #if(logs.pageNum == navPage) active #end">
+                            <a class="page-link" href="/admin/logs?page=${navPage}">${navPage}</a>
+                        </li>
+                        #end
+
+                        #if(logs.hasNextPage)
+                        <li class="page-item"><a class="page-link" href="/admin/logs?page=${logs.nextPage}">下一页</a></li>
+                        #else
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">下一页</a>
+                        </li>
+                        #end
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+#include("../layout/footer.html")
+</body>
+</html>
