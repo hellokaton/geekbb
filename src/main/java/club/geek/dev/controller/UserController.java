@@ -91,7 +91,7 @@ public class UserController {
     @JSON
     public RestResponse<?> saveSetting(Profile profile) {
         if (!GeekDevUtils.isLogin()) {
-            return RestResponse.fail(403);
+            return RestResponse.fail().code(403);
         }
         try {
             profile.setBio(GeekDevUtils.unicodeToAliases(profile.getBio()));

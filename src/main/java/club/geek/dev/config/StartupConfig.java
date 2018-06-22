@@ -10,6 +10,7 @@ import com.blade.Environment;
 import com.blade.event.BeanProcessor;
 import com.blade.ioc.annotation.Bean;
 import com.blade.kit.JsonKit;
+import com.blade.loader.BladeLoader;
 import com.blade.mvc.view.template.JetbrickTemplateEngine;
 import com.github.scribejava.apis.GitHubApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -36,10 +37,10 @@ import static io.github.biezhi.anima.Anima.select;
  */
 @Bean
 @Slf4j
-public class StartupConfig implements BeanProcessor {
+public class StartupConfig implements BladeLoader {
 
     @Override
-    public void preHandle(Blade blade) {
+    public void preLoad(Blade blade) {
         Environment environment = blade.environment();
 
         // Github
@@ -58,7 +59,7 @@ public class StartupConfig implements BeanProcessor {
     }
 
     @Override
-    public void processor(Blade blade) {
+    public void load(Blade blade) {
 
         log.info("Environment: {}", JsonKit.toString(blade.environment().toMap()));
 

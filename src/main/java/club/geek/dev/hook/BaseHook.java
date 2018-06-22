@@ -6,6 +6,7 @@ import club.geek.dev.model.db.User;
 import club.geek.dev.utils.GeekDevUtils;
 import com.blade.ioc.annotation.Bean;
 import com.blade.kit.StringKit;
+import com.blade.mvc.RouteContext;
 import com.blade.mvc.hook.Signature;
 import com.blade.mvc.hook.WebHook;
 import com.blade.mvc.http.Request;
@@ -25,20 +26,18 @@ import static io.github.biezhi.anima.Anima.select;
 public class BaseHook implements WebHook {
 
     @Override
-    public boolean before(Signature signature) {
-        Request  request  = signature.request();
-        Response response = signature.response();
-        String   uri      = request.uri();
+    public boolean before(RouteContext context) {
+        String uri = context.uri();
 
-        log.info("IP: {}, UA: {}", request.address(), request.userAgent());
+        log.info("IP: {}, UA: {}", context.address(), context.userAgent());
 
-        if (GeekDev.me().hasIp(request.address())) {
-            response.text("YOUR IP HAS BEAN BLOCKED!");
+        if (GeekDev.me().hasIp(context.address())) {
+            context.text("YOUR IP HAS BEAN BLOCKED!");
             return false;
         }
 
         if (!GeekDevUtils.isLogin()) {
-            String cookie = request.cookie(GeekDevConst.LOGIN_COOKIE_KEY);
+            String cookie = context.cookie(GeekDevConst.LOGIN_COOKIE_KEY);
             if (StringKit.isNotBlank(cookie)) {
                 try {
                     Long uid  = GeekDevUtils.decodeUID(cookie);
@@ -52,8 +51,8 @@ public class BaseHook implements WebHook {
         if (uri.startsWith("/admin")) {
             if (GeekDevUtils.isAdmin() || GeekDevUtils.isMaster()) {
             } else {
-                log.warn("IP: {} 访问: {}", request.address(), uri);
-                response.text("你走错片场了.");
+                log.warn("IP: {} 访问: {}", context.address(), uri);
+                context.text("你走错片场了.");
                 return false;
             }
         }

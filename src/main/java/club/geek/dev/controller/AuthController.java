@@ -13,6 +13,7 @@ import club.geek.dev.utils.GeekDevUtils;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.JsonKit;
 import com.blade.kit.StringKit;
+import com.blade.mvc.RouteContext;
 import com.blade.mvc.WebContext;
 import com.blade.mvc.annotation.CookieParam;
 import com.blade.mvc.annotation.GetRoute;
@@ -52,21 +53,21 @@ public class AuthController {
     private LogService logService;
 
     @GetRoute("signin")
-    public void signin(Request request, Response response, @Param String redirect) {
+    public void signin(RouteContext ctx, @Param String redirect) {
 
         String allow = GeekDev.me().getSetting(GeekDevConst.SETTING_SITE_ALLOW_REGSITER);
         if (!"1".equals(allow)) {
-            request.attribute("tipMsg", "站点目前不开放注册。");
-            response.render(PAGE_TIPS);
+            ctx.attribute("tipMsg", "站点目前不开放注册。");
+            ctx.render(PAGE_TIPS);
             return;
         }
 
         String authorizationUrl = oAuth20Service.getAuthorizationUrl();
         log.info("AuthorizationUrl: {}", authorizationUrl);
         if (StringKit.isNotBlank(redirect)) {
-            response.cookie(GeekDevConst.REDIRECT_COOKIE_KEY, redirect, 3600);
+            ctx.cookie(GeekDevConst.REDIRECT_COOKIE_KEY, redirect, 3600);
         }
-        response.redirect(authorizationUrl);
+        ctx.redirect(authorizationUrl);
     }
 
     @GetRoute("github")
