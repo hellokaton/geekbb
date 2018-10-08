@@ -38,20 +38,18 @@
 
 ## 打包
 
-执行 `sh package.sh` 即可打包，也可以自行执行命令。
+执行 `mvn clean package -Dmaven.skip.test=true -Pprod` 即可打包。
 
-打包后会生成在 `target/dist/geek-dev-least` 目录下，整个文件夹的内容上传到服务器即可。
+打包后会生成在 `target/dist/geekbb` 目录下，上传到服务器解压即可。
 
-1. 服务器需要手动创建一个名为 `db` 的目录，和 `geek-dev-least.jar` 同级
-2. 注意修改服务器的 `resources/app.properties` 配置
+1. 服务器需要手动创建一个名为 `db` 的目录，和 `geekbb-latest.jar` 同级
+2. 注意修改服务器 `resources/application-prod.properties` 的 Github 和数据库配置
 
 **服务器运行**
 
 ```bash
-java -jar -Xms512m -Xmx512m -XX:-LoopUnswitching -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled geek-dev-least.jar
+sh tool start
 ```
-
-这一步也可以自行编写 `shell` 脚本快捷执行。
 
 ## License
 
